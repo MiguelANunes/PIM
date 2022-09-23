@@ -1,5 +1,10 @@
 from PIL import Image
 
+def in_tuple(val:int, t:tuple):
+    if val >= t[0] and val <= t[1]:
+        return True
+    return False
+
 def aplica_limiar(imagem, pixels, limiar:tuple):
     xsize, ysize = imagem.size
 
@@ -29,11 +34,13 @@ def BFS(imagem, pixels, start):
 
     while len(visitar) > 0:
         prox = visitar.pop(0)
+        visitados.append(prox)
         
         vizinhos = []
         for move in moves:
             # carregando todos os vizinhos do pixel atual
             x,y = move[0]+prox[0], move[1]+prox[1]
+            # print(f"Estou olhando para {(x,y)}")
 
             if ignorePixel(x,y):
                 continue
@@ -55,7 +62,7 @@ def ignore_sublist(outerList, item):
             return True
     return False
 
-def find_conexos(imagem, pixels):
+def encontra_moedas(imagem, pixels):
     xsize, ysize = imagem.size
 
     objetos = []
@@ -79,20 +86,47 @@ def popula_imagem(pixels, pixelsColoridos):
         for pixel in objeto:
             pixels[pixel[0],pixel[1]] = (255,0,0)
 
-moedas = Image.open("Moedas2.jpg").convert("L")
-pixels = moedas.load() # pixels é a matriz de pixels da imagem, não posso acessar isso de outra forma
-# moedas.save("Moedas2Cinzas.png")
-# exit()
-razao = 27/20 # moeda de R$1 tem 27 mm de diâmetro, R$0,10 tem 20 mm de diâmetro
-print(razao)
-limiar = (25,200)
-aplica_limiar(moedas, pixels, limiar)
-moedas.show()
-encontradas = find_conexos(moedas, pixels)
-# lista de listas de pares (x,y) de pixels que compõe moedas
+def main():
 
-# criando uma nova imagem que tem todas as moedas da imagem original pintadas de vemelho
-moedasVermelhas = Image.new("RGB", moedas.size)
-pixelsVermelhos = moedasVermelhas.load()
-popula_imagem(pixelsVermelhos, encontradas)
-moedasVermelhas.save("Moedas2Vermelhas")
+    # carregando a imagem
+    moedas = Image.open("Moedas.jpg").convert("L")
+    pixels = moedas.load() # pixels é a matriz de pixels da imagem, não posso acessar isso de outra forma
+    # moedas.save("Moedas2Cinzas.png")
+    # exit()
+
+    limiar = (25,200)
+    aplica_limiar(moedas, pixels, limiar)
+    # moedas.show()
+    moedasEncontradas = encontra_moedas(moedas, pixels)
+    # lista de listas de pares (x,y) de pixels que compõe moedas
+
+    tamanhos = [len(moeda) for moeda in moedasEncontradas]
+    tamanhos.sort()
+    # gerando uma lista contendo os tamanhos das moedas e ordenando do maior para o menor
+    maiorMoeda = max(tamanhos) # pegando a maior moeda
+
+    # moedas de 1 real são maiores que de 10 centavos
+    # logo, para filtrar todas as moedas de 1 real, deve selecionar todas as moedas que tem +ou-
+    # o mesmo tamanho que a maior moeda
+    # toda moeda que não é de 1 real é de 10 centavos
+
+    moedas1Real = []
+    moedas10Centavos = []
+    for tamanhoMoeda in tamanhos:
+        if in_tuple(tamanhoMoeda, (maiorMoeda-((1/10)*tamanhoMoeda), maiorMoeda+((1/10)*tamanhoMoeda))):
+            moedas1Real.append(tamanhoMoeda)
+        else:
+            moedas10Centavos.append(tamanhoMoeda)
+    
+    valor = len(moedas1Real) + (0.1*len(moedas10Centavos))
+
+    print("Valor total na imagem: R${:.2f}".format(valor))
+
+    # criando uma nova imagem que tem todas as moedas da imagem original pintadas de vermelho
+    # moedasVermelhas = Image.new("RGB", moedas.size)
+    # pixelsVermelhos = moedasVermelhas.load()
+    # popula_imagem(pixelsVermelhos, encontradas)
+    # moedasVermelhas.save("Moedas2Vermelhas")
+
+if __name__ == "__main__":
+    main()
