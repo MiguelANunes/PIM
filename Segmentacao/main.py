@@ -71,11 +71,11 @@ def encontra_moedas(imagem, pixels):
     for i in range(xsize):
         for j in range(ysize):
             if pixels[i,j] == 255 and not ignore_sublist(objetos, (i,j)):
-                print("\tIndo para o BFS")
+                print("/tIndo para o BFS")
                 # BFS para achar todos os pixels brancos conexos com o atual
                 objeto = BFS(imagem, pixels, (i,j))
                 objetos.append(objeto)
-                print(f"\t{len(objeto)}")
+                print(f"/t{len(objeto)}")
 
     # removendo todos as coisas que encontrou que não são moedas
     objetos = [obj for obj in objetos if len(obj) >= 10000]
@@ -89,7 +89,7 @@ def popula_imagem(pixels, pixelsColoridos):
 def main():
 
     # carregando a imagem
-    moedas = Image.open("Moedas.jpg").convert("L")
+    moedas = Image.open("D:/Documentos/Code/UDESC/PIM/Segmentacao/Moedas.jpg").convert("L")
     pixels = moedas.load() # pixels é a matriz de pixels da imagem, não posso acessar isso de outra forma
     # moedas.save("Moedas2Cinzas.png")
     # exit()
@@ -121,12 +121,5 @@ def main():
     valor = len(moedas1Real) + (0.1*len(moedas10Centavos))
 
     print("Valor total na imagem: R${:.2f}".format(valor))
-
-    # criando uma nova imagem que tem todas as moedas da imagem original pintadas de vermelho
-    # moedasVermelhas = Image.new("RGB", moedas.size)
-    # pixelsVermelhos = moedasVermelhas.load()
-    # popula_imagem(pixelsVermelhos, encontradas)
-    # moedasVermelhas.save("Moedas2Vermelhas")
-
 if __name__ == "__main__":
     main()
