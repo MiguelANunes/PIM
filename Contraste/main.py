@@ -1,4 +1,4 @@
-import cv2, numpy, math, skimage
+import cv2, numpy, math#, skimage
 from matplotlib import pyplot as plt
 
 pathIn  = "/home/miguel/Documents/Matérias/PIM/Contraste/Imagens/"
