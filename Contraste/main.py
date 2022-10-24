@@ -47,10 +47,9 @@ def histograma(img, nome):
     plt.close()
 
 def equalizar(img):
-    img_numpy = numpy.array(img)
-    imagem_yuv = cv2.cvtColor(img_numpy,cv2.COLOR_BGR2YUV)
+    imagem_yuv = skimage.color.rgb2yiq(img.rgb)
     imagem_yuv[:,:,0] = cv2.equalizeHist(imagem_yuv[:,:,0])
-    img_equalizada = cv2.cvtColor(imagem_yuv, cv2.COLOR_YUV2BGR)
+    img_equalizada = skimage.color.yiq2rgb(img.yiq)
 
     return img_equalizada
 
