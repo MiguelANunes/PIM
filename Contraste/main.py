@@ -1,8 +1,8 @@
-import cv2, numpy, math#, skimage
+import cv2, skimage, math, numpy
 from matplotlib import pyplot as plt
 
-pathIn  = "/home/miguel/Documents/Matérias/PIM/Contraste/Imagens/"
-pathOut = "/home/miguel/Documents/Matérias/PIM/Contraste/Resultados/"
+pathIn  = "D:/Documentos/Code/UDESC/PIM/Contraste/Imagens/"
+pathOut = "D:/Documentos/Code/UDESC/PIM/Contraste/Resultados/"
 
 def intensidade(img):
     intensidade = [0] * 256
@@ -46,6 +46,14 @@ def histograma(img, nome):
     plt.savefig(pathOut+"Histograma"+nome)
     plt.close()
 
+def equalizar(img):
+    img_numpy = numpy.array(img)
+    imagem_yuv = cv2.cvtColor(img_numpy,cv2.COLOR_BGR2YUV)
+    imagem_yuv[:,:,0] = cv2.equalizeHist(imagem_yuv[:,:,0])
+    img_equalizada = cv2.cvtColor(imagem_yuv, cv2.COLOR_YUV2BGR)
+
+    return img_equalizada
+
 def item1():
     imagens = ["Clara.jpg", "Escura.jpg", "Lena.png"]
 
@@ -62,18 +70,26 @@ def item1():
         print(f"Entropia de {imagem}: {e}")
 
         histograma(img, imagem)
-        string = pathOut+"Histograma"+imagem
-        print(f"Histograma de {imagem} salvo em {string}")
+        string = "Item1"+pathOut+"Histograma"+imagem
+        print(f"Item 1 - Histograma de {str(imagem)} salvo em {string}")
 
 def item2():
     imagens = ["Clara.jpg", "Escura.jpg", "Marilyn.jpg"]
+   
     for imagem in imagens:
-        img = cv2.imread(pathIn+imagem, 2)
         pass
+        
 
 def item3():
     imagem = "Outono"
-    pass
+
+    img = equalizar(imagem)
+
+    cv2.imwrite('{imagem}.jpg', img)
+
+    histograma(img, imagem)
+    string = "Item3"+pathOut+"Histograma"+imagem
+    print(f"Item 3 - Histograma de {str(imagem)} salvo em {string}")
 
 def main():
     item1()
