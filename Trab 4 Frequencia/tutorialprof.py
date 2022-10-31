@@ -42,8 +42,6 @@ def fourier_iterator(image, value_list):
         img_ver = fourier_masker_ver(image, i)
         img_hor = fourier_masker_hor(img_ver, i)
 
-    return img_hor
-
 
 fourier_masker_ver(dark_image, 1)
 fourier_masker_hor(dark_image, 1)

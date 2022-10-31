@@ -33,9 +33,9 @@ def fourier(mascara):
         # imgFourierVer = fourier_mascara_vertical(copy(imgFourier), mascara)
         # imgFourierHorVer = fourier_mascara_horizontal(fourier_mascara_vertical(copy(imgFourier), mascara), mascara)
 
-        imgTransformada = abs(numpy.fft.ifft2(fourier_mascara_horizontal(
-            fourier_mascara_vertical(imgFourier, mascara), mascara)))
-        plt.figure(num=None, figsize=(8, 6), dpi=80)
+        imgTransformada = abs(numpy.fft.ifft2(fourier_mascara_vertical(
+            fourier_mascara_horizontal(imgFourier, mascara), mascara)))
+        plt.figure(num=None, figsize=(8, 6), dpi=300)
         plt.imshow(imgTransformada, cmap='gray')
         plt.show()
 
